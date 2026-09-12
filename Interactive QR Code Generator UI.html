@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QR Gene - Free QR Code Generator</title>
+
+<!-- Tailwind CSS (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- QR Code generation library (lightweight, works in browser, very reliable CDN) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+  /* Hide scrollbar for the QR type selector but keep it scrollable */
+  #qrTypeList::-webkit-scrollbar { height: 6px; }
+  #qrTypeList::-webkit-scrollbar-thumb { background: #d8b4fe; border-radius: 10px; }
+</style>
+</head>
+
+<body class="bg-purple-50 text-gray-700 min-h-screen">
+
+  <!-- ============ HEADER ============ -->
+  <header class="bg-white border-b border-purple-100 sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <!-- Logo / Site name -->
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold">Q</div>
+        <span class="text-xl font-bold text-gray-800">QR Gene</span>
+      </div>
+      <!-- Simple nav text (kept minimal for beginners) -->
+      <nav class="hidden sm:block text-sm text-gray-500">
+        Free QR Code Generator
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ MAIN CONTENT ============ -->
+  <main class="max-w-6xl mx-auto px-4 py-6 sm:py-10">
+
+    <!-- Page title -->
+    <div class="mb-6 text-center sm:text-left">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Create your QR Code</h1>
+      <p class="text-gray-500 mt-1">Choose a type, add your content, customize it, then download.</p>
+    </div>
+
+    <!-- ===== QR TYPE SELECTION ===== -->
+    <div class="mb-6">
+      <div id="qrTypeList" class="flex gap-3 overflow-x-auto pb-2">
+        <!-- Each button below represents one QR type. data-type is used by JavaScript -->
+        <button class="qr-type-btn" data-type="url">🔗 URL / Link</button>
+        <button class="qr-type-btn" data-type="text">📝 Text</button>
+        <button class="qr-type-btn" data-type="image">🖼️ Image</button>
+        <button class="qr-type-btn" data-type="pdf">📄 PDF</button>
+        <button class="qr-type-btn" data-type="whatsapp">💬 WhatsApp</button>
+        <button class="qr-type-btn" data-type="instagram">📷 Instagram</button>
+        <button class="qr-type-btn" data-type="youtube">▶️ YouTube</button>
+      </div>
+    </div>
+
+    <!-- ===== TWO COLUMN LAYOUT (stacks to 1 column on mobile) ===== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- LEFT COLUMN: Add Content + Customize -->
+      <div class="flex flex-col gap-6">
+
+        <!-- ===== STEP 1: ADD CONTENT ===== -->
+        <section class="bg-white rounded-2xl shadow-sm border border-purple-100 p-5 sm:p-6">
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
+            <span class="step-number">1</span> Add Content
+          </h2>
+
+          <!-- Dynamic input area: JavaScript changes what is shown here based on selected type -->
+          <div id="contentInputs">
+
+            <!-- URL input (default / shown first) -->
+            <div id="input-url" class="qr-input-group">
+              <label class="input-label">
+                Enter URL or link
+                <span class="help-icon" title="Example: https://example.com">?</span>
+              </label>
+              <input type="text" id="urlInput" placeholder="https://example.com"
+                     class="text-input" />
+            </div>
+
+            <!-- Plain text input -->
+            <div id="input-text" class="qr-input-group hidden">
+              <label class="input-label">Enter your text</label>
+              <textarea id="textInput" rows="4" placeholder="Type any text here..."
+                        class="text-input resize-none"></textarea>
+            </div>
+
+            <!-- Image link input -->
+            <div id="input-image" class="qr-input-group hidden">
+              <label class="input-label">
+                Enter image URL
+                <span class="help-icon" title="Paste a direct link to an image">?</span>
+              </label>
+              <input type="text" id="imageInput" placeholder="https://example.com/photo.jpg"
+                     class="text-input" />
+            </div>
+
+            <!-- PDF link input -->
+            <div id="input-pdf" class="qr-input-group hidden">
+              <label class="input-label">
+                Enter PDF URL
+                <span class="help-icon" title="Paste a direct link to a PDF file">?</span>
+              </label>
+              <input type="text" id="pdfInput" placeholder="https://example.com/file.pdf"
+                     class="text-input" />
+            </div>
+
+            <!-- WhatsApp inputs -->
+            <div id="input-whatsapp" class="qr-input-group hidden">
+              <label class="input-label">Phone number (with country code)</label>
+              <input type="text" id="whatsappNumber" placeholder="e.g. 919876543210"
+                     class="text-input mb-3" />
+              <label class="input-label">Message (optional)</label>
+              <textarea id="whatsappMessage" rows="3" placeholder="Hi, I found you on QR Gene!"
+                        class="text-input resize-none"></textarea>
+            </div>
+
+            <!-- Instagram input -->
+            <div id="input-instagram" class="qr-input-group hidden">
+              <label class="input-label">Instagram profile link or username</label>
+              <input type="text" id="instagramInput" placeholder="https://instagram.com/yourname"
+                     class="text-input" />
+            </div>
+
+            <!-- YouTube input -->
+            <div id="input-youtube" class="qr-input-group hidden">
+              <label class="input-label">YouTube video or channel URL</label>
+              <input type="text" id="youtubeInput" placeholder="https://youtube.com/watch?v=..."
+                     class="text-input" />
+            </div>
+
+          </div>
+
+          <!-- Simple validation message -->
+          <p id="inputError" class="text-red-500 text-sm mt-3 hidden">Please enter a value first.</p>
+        </section>
+
+        <!-- ===== STEP 2: CUSTOMIZE ===== -->
+        <section class="bg-white rounded-2xl shadow-sm border border-purple-100 p-5 sm:p-6">
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
+            <span class="step-number">2</span> Customize
+          </h2>
+
+          <div class="grid grid-cols-2 gap-4">
+
+            <!-- QR Style -->
+            <div class="col-span-2 sm:col-span-1">
+              <label class="input-label">QR Style</label>
+              <select id="qrStyle" class="text-input">
+                <option value="square">Classic</option>
+                <option value="rounded">Rounded</option>
+              </select>
+            </div>
+
+            <!-- Error Correction Level -->
+            <div class="col-span-2 sm:col-span-1">
+              <label class="input-label">Error Correction</label>
+              <select id="qrErrorLevel" class="text-input">
+                <option value="L">Low</option>
+                <option value="M" selected>Medium</option>
+                <option value="Q">Quartile</option>
+                <option value="H">High</option>
+              </select>
+            </div>
+
+            <!-- QR Color -->
+            <div class="col-span-1">
+              <label class="input-label">QR Color</label>
+              <input type="color" id="qrColor" value="#7c3aed" class="color-input" />
+            </div>
+
+            <!-- Background Color -->
+            <div class="col-span-1">
+              <label class="input-label">Background</label>
+              <input type="color" id="qrBgColor" value="#ffffff" class="color-input" />
+            </div>
+
+            <!-- Size -->
+            <div class="col-span-2">
+              <label class="input-label">Size: <span id="sizeValue">260</span>px</label>
+              <input type="range" id="qrSize" min="150" max="500" step="10" value="260"
+                     class="w-full accent-purple-600" />
+            </div>
+
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN: QR Preview + Download -->
+      <div>
+        <section class="bg-white rounded-2xl shadow-sm border border-purple-100 p-5 sm:p-6 lg:sticky lg:top-24">
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
+            <span class="step-number">3</span> Generate &amp; Download QR
+          </h2>
+
+          <!-- QR Preview Area -->
+          <div class="bg-purple-50 rounded-xl border border-dashed border-purple-200 flex items-center justify-center p-6 min-h-[280px]">
+            <div id="qrPreview" class="max-w-full"></div>
+          </div>
+
+          <p class="text-center text-sm text-gray-400 mt-3">
+            Preview updates automatically as you type.
+          </p>
+
+          <!-- Download controls -->
+          <div class="grid grid-cols-2 gap-4 mt-5">
+            <div>
+              <label class="input-label">Format</label>
+              <select id="downloadFormat" class="text-input">
+                <option value="png">PNG</option>
+                <option value="jpg">JPG</option>
+                <option value="svg">SVG</option>
+              </select>
+            </div>
+            <div>
+              <label class="input-label">Download Size</label>
+              <select id="downloadSize" class="text-input">
+                <option value="300">300 x 300</option>
+                <option value="512" selected>512 x 512</option>
+                <option value="1024">1024 x 1024</option>
+              </select>
+            </div>
+          </div>
+
+          <button id="downloadBtn"
+                  class="w-full mt-5 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-xl transition-colors">
+            Download QR Code
+          </button>
+        </section>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="text-center text-sm text-gray-400 py-6">
+    Made with QR Gene — a simple, free QR code generator.
+  </footer>
+
+<style>
+  /* ===== Reusable component styles (kept simple for beginners) ===== */
+
+  .qr-type-btn {
+    flex: 0 0 auto;
+    padding: 0.6rem 1rem;
+    border-radius: 0.75rem;
+    background: white;
+    border: 1px solid #e9d5ff;
+    color: #4b5563;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+  }
+  .qr-type-btn:hover { background: #f5f3ff; }
+  .qr-type-btn.active {
+    background: #7c3aed;
+    color: white;
+    border-color: #7c3aed;
+  }
+
+  .step-number {
+    background: #7c3aed;
+    color: white;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+  }
+
+  .input-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.4rem;
+  }
+
+  .help-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 9999px;
+    background: #ede9fe;
+    color: #7c3aed;
+    font-size: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: help;
+  }
+
+  .text-input {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.15s ease-in-out;
+  }
+  .text-input:focus { border-color: #7c3aed; }
+
+  .color-input {
+    width: 100%;
+    height: 2.6rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.6rem;
+    padding: 0.2rem;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+/* ==========================================================
+   QR GENE - Simple Vanilla JavaScript
+   Beginner friendly, well commented, no frameworks.
+   ========================================================== */
+
+// ---- 1. Grab all the elements we need ----
+const qrTypeButtons = document.querySelectorAll(".qr-type-btn");
+const inputGroups = document.querySelectorAll(".qr-input-group");
+const inputError = document.getElementById("inputError");
+
+const qrPreview = document.getElementById("qrPreview");
+
+// Keeps track of the current QR object so we can clear/replace it
+let currentQrObject = null;
+
+// Customization controls
+const qrStyleSelect = document.getElementById("qrStyle");
+const qrErrorLevel = document.getElementById("qrErrorLevel");
+const qrColorInput = document.getElementById("qrColor");
+const qrBgColorInput = document.getElementById("qrBgColor");
+const qrSizeInput = document.getElementById("qrSize");
+const sizeValueLabel = document.getElementById("sizeValue");
+
+// Download controls
+const downloadFormat = document.getElementById("downloadFormat");
+const downloadSize = document.getElementById("downloadSize");
+const downloadBtn = document.getElementById("downloadBtn");
+
+// This keeps track of which QR type is currently selected (default = url)
+let currentType = "url";
+
+// ---- 2. Handle QR Type Selection ----
+qrTypeButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    // Remove "active" style from all buttons, then add it to the clicked one
+    qrTypeButtons.forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    // Update current type and show the matching input group
+    currentType = btn.dataset.type;
+    showInputGroup(currentType);
+    generateQRCode();
+  });
+});
+
+// Make the first button (URL) active by default
+qrTypeButtons[0].classList.add("active");
+
+// Shows only the input fields relevant to the selected QR type
+function showInputGroup(type) {
+  inputGroups.forEach((group) => group.classList.add("hidden"));
+  const activeGroup = document.getElementById("input-" + type);
+  if (activeGroup) activeGroup.classList.remove("hidden");
+  inputError.classList.add("hidden");
+}
+
+// ---- 3. Build the text/content that will go INSIDE the QR code ----
+// Based on the selected type, this collects the right input value(s)
+// and turns them into a single string to encode.
+function getQRContent() {
+  switch (currentType) {
+    case "url":
+      return document.getElementById("urlInput").value.trim();
+
+    case "text":
+      return document.getElementById("textInput").value.trim();
+
+    case "image":
+      return document.getElementById("imageInput").value.trim();
+
+    case "pdf":
+      return document.getElementById("pdfInput").value.trim();
+
+    case "whatsapp": {
+      const number = document.getElementById("whatsappNumber").value.trim();
+      const message = document.getElementById("whatsappMessage").value.trim();
+      if (!number) return "";
+      // Build a standard WhatsApp chat link
+      return "https://wa.me/" + number + (message ? "?text=" + encodeURIComponent(message) : "");
+    }
+
+    case "instagram": {
+      let value = document.getElementById("instagramInput").value.trim();
+      if (!value) return "";
+      // If user only typed a username, turn it into a full link
+      if (!value.startsWith("http")) {
+        value = "https://instagram.com/" + value.replace("@", "");
+      }
+      return value;
+    }
+
+    case "youtube":
+      return document.getElementById("youtubeInput").value.trim();
+
+    default:
+      return "";
+  }
+}
+
+// ---- 4. Generate the QR Code ----
+// This runs every time the user types or changes a customization option.
+function generateQRCode() {
+  // Safety check: make sure the QR library actually loaded from the CDN
+  if (typeof QRCode === "undefined") {
+    console.error("QRCode library failed to load. Check your internet connection or CDN link.");
+    return;
+  }
+
+  const content = getQRContent();
+  const size = parseInt(qrSizeInput.value);
+
+  // If there is no content yet, show an empty placeholder QR
+  const textToEncode = content || "https://qrgene.app";
+
+  // Clear whatever QR code was there before
+  qrPreview.innerHTML = "";
+
+  // Create a brand new QR code inside the preview container
+  currentQrObject = new QRCode(qrPreview, {
+    text: textToEncode,
+    width: size,
+    height: size,
+    colorDark: qrColorInput.value,
+    colorLight: qrBgColorInput.value,
+    correctLevel: QRCode.CorrectLevel[qrErrorLevel.value],
+  });
+
+  // "Rounded" style is a simple visual trick: round the corners with CSS
+  const renderedElement = qrPreview.querySelector("canvas, img");
+  if (renderedElement) {
+    renderedElement.style.borderRadius = qrStyleSelect.value === "rounded" ? "16px" : "0px";
+    renderedElement.style.maxWidth = "100%";
+    renderedElement.style.height = "auto";
+  }
+}
+
+// ---- 5. Live-update the preview whenever inputs change ----
+// We listen for "input" and "change" events on the whole form area
+document.getElementById("contentInputs").addEventListener("input", generateQRCode);
+
+[qrStyleSelect, qrErrorLevel, qrColorInput, qrBgColorInput].forEach((el) => {
+  el.addEventListener("change", generateQRCode);
+});
+
+qrSizeInput.addEventListener("input", () => {
+  sizeValueLabel.textContent = qrSizeInput.value;
+  generateQRCode();
+});
+
+// ---- 6. Download Functionality ----
+downloadBtn.addEventListener("click", () => {
+  const content = getQRContent();
+
+  // Simple validation: make sure there is something to encode
+  if (!content) {
+    inputError.classList.remove("hidden");
+    return;
+  }
+  inputError.classList.add("hidden");
+
+  const format = downloadFormat.value;
+  const size = parseInt(downloadSize.value);
+
+  // Build a separate, hidden QR code at the exact download size requested.
+  // (Keeping this separate from the visible preview avoids resizing it on screen.)
+  const hiddenContainer = document.createElement("div");
+  hiddenContainer.style.display = "none";
+  document.body.appendChild(hiddenContainer);
+
+  new QRCode(hiddenContainer, {
+    text: content,
+    width: size,
+    height: size,
+    colorDark: qrColorInput.value,
+    colorLight: qrBgColorInput.value,
+    correctLevel: QRCode.CorrectLevel[qrErrorLevel.value],
+  });
+
+  // The library needs a brief moment to finish drawing onto the canvas
+  setTimeout(() => {
+    const canvasEl = hiddenContainer.querySelector("canvas");
+
+    if (!canvasEl) {
+      console.error("Could not generate QR image for download.");
+      document.body.removeChild(hiddenContainer);
+      return;
+    }
+
+    if (format === "svg") {
+      // Simple approach: wrap the generated PNG image inside a basic SVG file
+      const pngDataUrl = canvasEl.toDataURL("image/png");
+      const svgString =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '">' +
+        '<image width="' + size + '" height="' + size + '" href="' + pngDataUrl + '"/>' +
+        '</svg>';
+      const blob = new Blob([svgString], { type: "image/svg+xml" });
+      triggerDownload(URL.createObjectURL(blob), "qr-gene.svg");
+    } else {
+      // PNG or JPG: read the image straight from the canvas
+      const mimeType = format === "jpg" ? "image/jpeg" : "image/png";
+      const dataUrl = canvasEl.toDataURL(mimeType, 1.0);
+      triggerDownload(dataUrl, "qr-gene." + format);
+    }
+
+    // Clean up the temporary hidden container
+    document.body.removeChild(hiddenContainer);
+  }, 100);
+});
+
+// Small helper function that creates a temporary link and clicks it
+// This is the simplest way to trigger a file download in vanilla JS.
+function triggerDownload(url, filename) {
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// ---- 7. Show the initial placeholder QR code on page load ----
+window.addEventListener("DOMContentLoaded", generateQRCode);
+</script>
+
+</body>
+</html>
