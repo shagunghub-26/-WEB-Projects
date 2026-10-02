@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>To-Do-List</title>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center mb-5">Task Manager</h1>
+        <div class="flex gap-2 mb-5">
+            <input id="taskInput" type="text" placeholder="Enter your task" class="border p-2 rounded w-full">
+            <button onclick="addTask()" class="bg-blue-500 text-white px-4">Add Task</button>
+        </div>
+        <ul id="taskList" class="space-y-2"></ul>
+    </div>
+    <script>
+        function addTask()
+        {
+            let input = document.getElementById("taskInput");
+            let task = input.value;
+            if(task === "")
+            {
+                alert("Please enter a task!");
+                return;
+            }
+            let li = document.createElement("li");
+            li.className = "flex justify-between items-center bg-gray-100 p-2 rounded";
+            li.innerHTML = `
+                <span onclick="completeTask(this)" class="cursor-pointer">${task}</span>
+                <button onclick="this.parentElement.remove()" class="text-red-500 text-white px-2 rounded">Remove</button>
+            `;
+            document.getElementById("taskList").appendChild(li);
+            input.value = "";''
+            function completeTask(task)
+            {
+
+                task.classList.toggle("line-through");
+                task.classList.toggle("text-gray-400");
+            }
+        }
+    </script>
+</body>
+</html>
