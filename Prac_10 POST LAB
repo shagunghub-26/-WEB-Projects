@@ -4,9 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CampusLink | Student Connect</title>
 
-  <!-- Tailwind CSS -->
+  <title>CampusLink | CM25112</title>
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -24,12 +25,13 @@
 
     .event-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.10);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.10);
     }
 
     .active-filter {
-      background: #2563eb;
+      background-color: #2563eb;
       color: white;
+      border-color: #2563eb;
     }
   </style>
 </head>
@@ -38,26 +40,38 @@
 
   <!-- Navbar -->
   <nav class="bg-white shadow-sm sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
-      <a href="#" class="text-2xl font-bold text-blue-600">
-        CampusLink<span class="text-orange-500">.</span>
-      </a>
+    <div class="max-w-7xl mx-auto px-5 py-3 flex flex-wrap items-center justify-between gap-3">
 
-      <div class="hidden md:flex items-center gap-7 font-medium">
+      <!-- Logo and Project Code -->
+      <div class="flex flex-col leading-none">
+        <a href="#home"
+           class="text-2xl md:text-3xl font-bold text-blue-600">
+          CampusLink<span class="text-orange-500">.</span>
+        </a>
+
+        <span class="text-2xl md:text-3xl font-extrabold text-blue-600 mt-1">
+          CM25112
+        </span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3 md:gap-6 font-medium text-sm md:text-base">
         <a href="#home" class="hover:text-blue-600">Home</a>
-        <a href="#events" class="hover:text-blue-600">Explore Events</a>
+        <a href="#events" class="hover:text-blue-600">Events</a>
         <a href="#about" class="hover:text-blue-600">About</a>
       </div>
 
       <a href="#events"
-         class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700">
+         class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
         Get Started
       </a>
+
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <section id="home" class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white">
+  <section id="home"
+           class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white">
+
     <div class="max-w-7xl mx-auto px-5 py-16 md:py-24 grid md:grid-cols-2 gap-10 items-center">
 
       <div>
@@ -82,22 +96,30 @@
       </div>
 
       <div class="bg-white/10 border border-white/20 rounded-3xl p-6 md:p-10">
+
         <div class="text-6xl mb-5">🎓</div>
-        <h2 class="text-3xl font-bold">One platform, endless opportunities.</h2>
+
+        <h2 class="text-3xl font-bold">
+          One platform, endless opportunities.
+        </h2>
+
         <p class="mt-4 text-blue-100">
           Discover technical, educational and cultural activities
           happening in the student community.
         </p>
 
         <div class="grid grid-cols-2 gap-4 mt-8">
+
           <div class="bg-white/10 rounded-xl p-4">
-            <p class="text-3xl font-bold" id="eventCount">6</p>
-            <p class="text-sm text-blue-100">Events listed</p>
+            <p id="eventCount" class="text-3xl font-bold">6</p>
+            <p class="text-sm text-blue-100">Events Listed</p>
           </div>
+
           <div class="bg-white/10 rounded-xl p-4">
-            <p class="text-3xl font-bold" id="registrationCount">0</p>
-            <p class="text-sm text-blue-100">My registrations</p>
+            <p id="registrationCount" class="text-3xl font-bold">0</p>
+            <p class="text-sm text-blue-100">My Registrations</p>
           </div>
+
         </div>
       </div>
 
@@ -108,10 +130,14 @@
   <section id="events" class="max-w-7xl mx-auto px-5 py-16">
 
     <div class="text-center mb-10">
-      <p class="text-blue-600 font-semibold">FIND YOUR NEXT OPPORTUNITY</p>
+      <p class="text-blue-600 font-semibold">
+        FIND YOUR NEXT OPPORTUNITY
+      </p>
+
       <h2 class="text-3xl md:text-4xl font-bold mt-2">
         Explore Campus Events
       </h2>
+
       <p class="text-slate-500 mt-3">
         Search events and discover something new.
       </p>
@@ -122,35 +148,53 @@
       <input
         type="text"
         id="searchInput"
-        placeholder="🔍 Search events, workshops, hackathons..."
-        class="w-full border border-slate-300 rounded-xl px-5 py-4 outline-none focus:ring-2 focus:ring-blue-500"
-      >
+        placeholder="Search events, workshops, hackathons..."
+        aria-label="Search events"
+        class="w-full border border-slate-300 rounded-xl px-5 py-4 outline-none focus:ring-2 focus:ring-blue-500">
     </div>
 
     <!-- Category Filters -->
     <div class="flex flex-wrap justify-center gap-3 mb-10">
-      <button class="filter-btn active-filter border rounded-full px-5 py-2"
-              data-category="All">All Events</button>
 
-      <button class="filter-btn border rounded-full px-5 py-2 hover:bg-blue-50"
-              data-category="Technical">Technical</button>
+      <button type="button"
+              class="filter-btn active-filter border rounded-full px-5 py-2"
+              data-category="All">
+        All Events
+      </button>
 
-      <button class="filter-btn border rounded-full px-5 py-2 hover:bg-blue-50"
-              data-category="Workshop">Workshop</button>
+      <button type="button"
+              class="filter-btn border rounded-full px-5 py-2 hover:bg-blue-50"
+              data-category="Technical">
+        Technical
+      </button>
 
-      <button class="filter-btn border rounded-full px-5 py-2 hover:bg-blue-50"
-              data-category="Cultural">Cultural</button>
+      <button type="button"
+              class="filter-btn border rounded-full px-5 py-2 hover:bg-blue-50"
+              data-category="Workshop">
+        Workshop
+      </button>
 
-      <button class="filter-btn border rounded-full px-5 py-2 hover:bg-blue-50"
-              data-category="Career">Career</button>
+      <button type="button"
+              class="filter-btn border rounded-full px-5 py-2 hover:bg-blue-50"
+              data-category="Cultural">
+        Cultural
+      </button>
+
+      <button type="button"
+              class="filter-btn border rounded-full px-5 py-2 hover:bg-blue-50"
+              data-category="Career">
+        Career
+      </button>
+
     </div>
 
-    <!-- Dynamic Event Cards -->
+    <!-- Event Cards -->
     <div id="eventContainer"
          class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
     </div>
 
-    <p id="noResults" class="hidden text-center text-slate-500 py-10">
+    <p id="noResults"
+       class="hidden text-center text-slate-500 py-10">
       No events found. Try another search.
     </p>
 
@@ -158,17 +202,22 @@
 
   <!-- About Section -->
   <section id="about" class="bg-white border-t">
+
     <div class="max-w-5xl mx-auto px-5 py-16 text-center">
-      <h2 class="text-3xl font-bold">About CampusLink</h2>
+
+      <h2 class="text-3xl font-bold">
+        About CampusLink
+      </h2>
 
       <p class="mt-5 text-slate-600 leading-7 max-w-3xl mx-auto">
-        CampusLink is a student-focused platform concept designed to
-        bring college events and opportunities together in one place.
-        It helps students discover activities, explore new interests
-        and participate in campus life.
+        CampusLink is a student-focused platform concept designed
+        to bring college events and opportunities together in one
+        place. It helps students discover activities, explore new
+        interests and participate in campus life.
       </p>
 
       <div class="grid md:grid-cols-3 gap-6 mt-10 text-left">
+
         <div class="bg-blue-50 p-6 rounded-2xl">
           <div class="text-3xl">🔎</div>
           <h3 class="font-bold text-lg mt-3">Discover</h3>
@@ -192,26 +241,41 @@
             Learn new skills through activities and events.
           </p>
         </div>
+
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-slate-900 text-white text-center px-5 py-7">
-    <h3 class="text-xl font-bold">
-      CampusLink<span class="text-orange-400">.</span>
-    </h3>
+  <footer class="bg-slate-900 text-white px-5 py-8">
 
-    <p class="text-slate-400 mt-2">
-      Connecting students with campus opportunities.
-    </p>
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5">
 
-    <p class="text-slate-500 text-sm mt-4">
-      © <span id="year"></span> CampusLink | Student Frontend Project
-    </p>
+      <!-- Footer Logo and Code -->
+      <div class="flex flex-col leading-none text-center md:text-left">
+
+        <span class="text-2xl font-bold text-blue-400">
+          CampusLink<span class="text-orange-400">.</span>
+        </span>
+
+        <span class="text-2xl font-extrabold text-white mt-2">
+          CM25112
+        </span>
+
+      </div>
+
+      <p class="text-slate-300 text-center">
+        Connecting students with campus opportunities.
+      </p>
+
+      <p class="text-slate-400 text-sm text-center">
+        © <span id="year"></span> CampusLink | Student Frontend Project
+      </p>
+
+    </div>
   </footer>
 
-  <!-- Toast Notification -->
+  <!-- Notification -->
   <div id="toast"
        role="status"
        aria-live="polite"
@@ -283,20 +347,28 @@
       }
     ];
 
-    // Store registrations during the current page session
+    // Track registrations during this page session
     const registeredEvents = new Set();
 
-    const eventContainer = document.getElementById("eventContainer");
-    const searchInput = document.getElementById("searchInput");
-    const noResults = document.getElementById("noResults");
-    const filterButtons = document.querySelectorAll(".filter-btn");
+    const eventContainer =
+      document.getElementById("eventContainer");
+
+    const searchInput =
+      document.getElementById("searchInput");
+
+    const noResults =
+      document.getElementById("noResults");
+
+    const filterButtons =
+      document.querySelectorAll(".filter-btn");
 
     let selectedCategory = "All";
     let toastTimer;
 
-    // Display event cards
+    // Display events
     function displayEvents() {
-      const searchText = searchInput.value.toLowerCase().trim();
+      const searchText =
+        searchInput.value.toLowerCase().trim();
 
       const filteredEvents = events.filter(event => {
         const matchesCategory =
@@ -305,29 +377,40 @@
 
         const searchableText =
           `${event.title} ${event.category} ${event.description} ${event.venue}`
-            .toLowerCase();
+          .toLowerCase();
 
-        const matchesSearch = searchableText.includes(searchText);
+        const matchesSearch =
+          searchableText.includes(searchText);
 
         return matchesCategory && matchesSearch;
       });
 
       eventContainer.innerHTML = filteredEvents.map(event => {
-        const isRegistered = registeredEvents.has(event.id);
+        const isRegistered =
+          registeredEvents.has(event.id);
 
         return `
           <article class="event-card bg-white border border-slate-200 rounded-2xl overflow-hidden">
+
             <div class="${event.color} p-7">
               <div class="flex justify-between items-center">
+
                 <span class="bg-white px-3 py-1 rounded-full text-sm font-medium">
                   ${event.category}
                 </span>
-                <span class="text-5xl" aria-hidden="true">${event.icon}</span>
+
+                <span class="text-5xl" aria-hidden="true">
+                  ${event.icon}
+                </span>
+
               </div>
             </div>
 
             <div class="p-6">
-              <h3 class="text-xl font-bold">${event.title}</h3>
+
+              <h3 class="text-xl font-bold">
+                ${event.title}
+              </h3>
 
               <p class="text-slate-500 text-sm mt-3">
                 📅 ${event.date}
@@ -342,22 +425,33 @@
               </p>
 
               <button
+                type="button"
                 data-event-id="${event.id}"
                 ${isRegistered ? "disabled" : ""}
                 class="register-btn w-full mt-6 py-3 rounded-xl font-semibold
-                ${isRegistered
-                  ? "bg-green-100 text-green-700 cursor-default"
-                  : "bg-blue-600 text-white hover:bg-blue-700"}">
+                ${
+                  isRegistered
+                    ? "bg-green-100 text-green-700 cursor-default"
+                    : "bg-blue-600 text-white hover:bg-blue-700"
+                }">
+
                 ${isRegistered ? "✓ Registered" : "Register Interest"}
+
               </button>
+
             </div>
           </article>
         `;
       }).join("");
 
-      noResults.classList.toggle("hidden", filteredEvents.length !== 0);
+      noResults.classList.toggle(
+        "hidden",
+        filteredEvents.length !== 0
+      );
 
-      document.getElementById("eventCount").textContent = events.length;
+      document.getElementById("eventCount").textContent =
+        events.length;
+
       document.getElementById("registrationCount").textContent =
         registeredEvents.size;
     }
@@ -365,7 +459,7 @@
     // Search events
     searchInput.addEventListener("input", displayEvents);
 
-    // Filter events by category
+    // Filter by category
     filterButtons.forEach(button => {
       button.addEventListener("click", () => {
         selectedCategory = button.dataset.category;
@@ -375,32 +469,44 @@
         });
 
         button.classList.add("active-filter");
+
         displayEvents();
       });
     });
 
-    // Handle registration using event delegation
+    // Register interest
     eventContainer.addEventListener("click", event => {
       const button = event.target.closest(".register-btn");
 
-      if (!button || button.disabled) return;
+      if (!button || button.disabled) {
+        return;
+      }
 
       const eventId = Number(button.dataset.eventId);
-      const selectedEvent = events.find(item => item.id === eventId);
 
-      if (!selectedEvent) return;
+      const selectedEvent = events.find(
+        item => item.id === eventId
+      );
+
+      if (!selectedEvent) {
+        return;
+      }
 
       registeredEvents.add(eventId);
+
       displayEvents();
 
-      showToast(`You registered your interest in ${selectedEvent.title}!`);
+      showToast(
+        `You registered your interest in ${selectedEvent.title}!`
+      );
     });
 
-    // Show notification
+    // Notification message
     function showToast(message) {
       const toast = document.getElementById("toast");
 
       clearTimeout(toastTimer);
+
       toast.textContent = message;
       toast.classList.remove("hidden");
 
@@ -409,11 +515,11 @@
       }, 3000);
     }
 
-    // Set current year
+    // Current year
     document.getElementById("year").textContent =
       new Date().getFullYear();
 
-    // Load initial events
+    // Initial display
     displayEvents();
   </script>
 
